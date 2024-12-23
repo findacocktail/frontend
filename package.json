@@ -1,5 +1,6 @@
 {
   "name": "frontend",
+  "homepage": "https://findacocktail.com",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,7 +8,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview --port 8080"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
