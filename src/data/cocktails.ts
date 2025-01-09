@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Cocktail } from "./model";
 
 async function getCocktails(terms: string[]): Promise<Cocktail[]> {
   let requestURL = new URL("https://api.findacocktail.com/cocktails");
@@ -10,6 +11,7 @@ async function getCocktails(terms: string[]): Promise<Cocktail[]> {
   const response = await fetch(requestURL, { method: "GET" });
 
   if (!response.ok) {
+    console.error(response.text)
     throw new Error("Network response was not ok");
   }
 
@@ -47,17 +49,3 @@ export const useCocktails = (terms: string[]) => {
   };
 };
 
-export interface Cocktail {
-  name: string;
-  youtube_link: string;
-  ingredients: Ingredient[];
-  method: string;
-  garnish: string;
-  image_url: string;
-}
-
-export interface Ingredient {
-  amount: number;
-  scale: string;
-  description: string;
-}
