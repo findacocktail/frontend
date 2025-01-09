@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Toolbar, Box, Card, CardMedia, CardContent } from "@mui/material";
+import { Toolbar, Card, CardMedia, CardContent } from "@mui/material";
 import {
   Autocomplete,
   AutocompleteChangeDetails,
@@ -30,13 +30,7 @@ export default function App() {
   };
 
   return (
-    <Box
-      position="relative"
-      marginLeft="10%"
-      marginRight="10%"
-      paddingTop="80px"
-      width="70%"
-    >
+    <>
       <Toolbar>
         <Autocomplete
           multiple
@@ -84,6 +78,6 @@ export default function App() {
             </Grid>
           ))}
       </Grid>
-    </Box>
+    </>
   );
 }

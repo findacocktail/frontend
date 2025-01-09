@@ -21,7 +21,7 @@ export default function CocktailDetails() {
   }
 
   return (
-    <Card sx={{paddingLeft:"20%", paddingRight:"20%"}}>
+    <Card sx={{paddingLeft:"20%", paddingRight:"20%", position:"relative"}}>
       <Typography variant="h3">{cocktail.name}</Typography>
 
       <CardMedia
