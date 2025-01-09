@@ -5,15 +5,7 @@ import Divider from "@mui/material/Divider";
 
 export default function CocktailDetails() {
   let { name } = useParams();
-  const { loading, error, cocktail } = useCocktail(name as string);
-
-  if (error) {
-    console.error(error);
-  }
-
-  if (loading) {
-    console.log("loading");
-  }
+  const { cocktail } = useCocktail(name as string);
 
   return (
     <Paper
@@ -24,7 +16,13 @@ export default function CocktailDetails() {
 
       <CardMedia
         component="img"
-        sx={{ height: 250, width: 150, display: "inline", marginLeft:"4%",marginTop:"4%" }}
+        sx={{
+          height: 250,
+          width: 150,
+          display: "inline",
+          marginLeft: "4%",
+          marginTop: "4%",
+        }}
         image={cocktail?.image_url}
         alt={cocktail?.name}
       />

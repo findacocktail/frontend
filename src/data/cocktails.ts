@@ -12,7 +12,7 @@ async function getCocktails(terms: string[]): Promise<Cocktail[]> {
 
   if (!response.ok) {
     console.error(response.text)
-    throw new Error("Network response was not ok");
+    throw response.status
   }
 
   return (await response.json()) as Promise<Cocktail[]>;
@@ -27,6 +27,7 @@ export const useCocktails = (terms: string[]) => {
     const fetchCocktails = async () => {
       try {
         if (terms.length == 0) {
+          setCocktails([])
           return;
         }
         setLoading(true);
@@ -46,6 +47,7 @@ export const useCocktails = (terms: string[]) => {
     loading,
     error,
     cocktails,
+    setError,
   };
 };
 

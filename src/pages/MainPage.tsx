@@ -1,24 +1,20 @@
 import { useState } from "react";
 import { Toolbar, Card, CardMedia, CardContent } from "@mui/material";
-import {
-  Autocomplete,
-  AutocompleteChangeDetails,
-  AutocompleteChangeReason,
-} from "@mui/material";
+import { Autocomplete, AutocompleteChangeReason } from "@mui/material";
+import { Alert, Fade } from "@mui/material";
+import { AutocompleteChangeDetails } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { TextField, Typography } from "@mui/material";
 import { useCocktails } from "../data/cocktails.ts";
 import LinearProgress from "@mui/joy/LinearProgress";
 import { Cocktail } from "../data/model.ts";
-import { Link } from "react-router";
+import { Link,useSearchParams } from "react-router";
 
 export default function App() {
-  const [searchTerms, setSearchTerms] = useState(new Array<string>());
-  const { loading, error, cocktails } = useCocktails(searchTerms);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchTerms, setSearchTerms] = useState(searchParams.getAll('s'));
+  const { loading, error, cocktails, setError } = useCocktails(searchTerms);
 
-  if (error) {
-    console.log(error);
-  }
 
   const handleSearchChange = (
     _event: React.SyntheticEvent,
@@ -26,7 +22,24 @@ export default function App() {
     _reason: AutocompleteChangeReason,
     _details?: AutocompleteChangeDetails<never> | undefined
   ) => {
+    setSearchParams(`?${new URLSearchParams(value.map(s=>['s',s]))}`)
     setSearchTerms(value);
+  };
+
+  const getErrorMessage = () => {
+    let length = searchTerms.length;
+    if (length === 0 || error === undefined) {
+      return "";
+    }
+
+    let errorMessage = "No results when search for terms combined: ";
+    for (let i = 0; i < length - 1; i++) {
+      errorMessage += `${searchTerms[i]}, `;
+    }
+
+    errorMessage += `${searchTerms[length - 1]}.`;
+
+    return errorMessage;
   };
 
   return (
@@ -34,21 +47,40 @@ export default function App() {
       <Toolbar>
         <Autocomplete
           multiple
-          id="search"
           options={[]}
           freeSolo
-          sx={{ backgroundColor: "white", borderRadius: 1, width: "100%" }}
+          sx={{ width: "100%", position: "static" }}
           onChange={handleSearchChange}
           renderInput={(params) => (
             <TextField
               {...params}
               variant="outlined"
-              placeholder="Search for cocktails"
+              placeholder="Search cocktails with name, liquor, garnish"
             />
           )}
         />
         {loading && <LinearProgress sx={{ width: "100%" }} />}
       </Toolbar>
+      <Fade
+        in={error !== undefined}
+        style={{ transformOrigin: "0 0 0" }}
+        addEndListener={() => {
+          setTimeout(() => {
+            setError(undefined);
+          }, 3000);
+        }}
+      >
+        <Alert
+          severity="error"
+          sx={{
+            position: "static",
+            marginLeft: "2%",
+            marginRight: "2%",
+          }}
+        >
+          {getErrorMessage()}
+        </Alert>
+      </Fade>
       <Grid container spacing={2} sx={{ mt: 3, px: 3, alignTracks: "center" }}>
         {cocktails &&
           cocktails.map((cocktail: Cocktail) => (
