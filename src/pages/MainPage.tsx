@@ -1,5 +1,10 @@
 import { useState } from "react";
 import { Toolbar, Box, Card, CardMedia, CardContent } from "@mui/material";
+import {
+  Autocomplete,
+  AutocompleteChangeDetails,
+  AutocompleteChangeReason,
+} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { TextField, Typography } from "@mui/material";
 import { useCocktails } from "../data/cocktails.ts";
@@ -15,29 +20,38 @@ export default function App() {
     console.log(error);
   }
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const delayDebounceFn = setTimeout(() => {
-      let terms = event.target.value.split(" ");
-      setSearchTerms(terms);
-    }, 1000);
-
-    return () => clearTimeout(delayDebounceFn);
+  const handleSearchChange = (
+    _event: React.SyntheticEvent,
+    value: string[],
+    _reason: AutocompleteChangeReason,
+    _details?: AutocompleteChangeDetails<never> | undefined
+  ) => {
+    setSearchTerms(value);
   };
 
   return (
     <Box
-      position="fixed"
-      marginLeft="15%"
-      marginRight="15%"
-      top="10%"
+      position="relative"
+      marginLeft="10%"
+      marginRight="10%"
+      paddingTop="80px"
       width="70%"
     >
       <Toolbar>
-        <TextField
-          variant="outlined"
-          placeholder="Search for cocktails"
-          onChange={handleSearchChange}
+        <Autocomplete
+          multiple
+          id="search"
+          options={[]}
+          freeSolo
           sx={{ backgroundColor: "white", borderRadius: 1, width: "100%" }}
+          onChange={handleSearchChange}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="outlined"
+              placeholder="Search for cocktails"
+            />
+          )}
         />
         {loading && <LinearProgress sx={{ width: "100%" }} />}
       </Toolbar>

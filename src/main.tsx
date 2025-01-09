@@ -4,10 +4,12 @@ import "./index.css";
 import App from "./pages/MainPage.tsx";
 import { BrowserRouter, Routes, Route } from "react-router";
 import CocktailDetails from "./pages/CocktailDetails.tsx";
+import MainBar from "./components/mainbar.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
+    <MainBar/>
       <Routes>
         <Route path="/cocktail/:name" element={<CocktailDetails />} />
         <Route path="/" element={<App />} />
